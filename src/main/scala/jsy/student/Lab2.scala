@@ -8,9 +8,9 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
 
   /*
    * CSCI 3155: Lab 2
-   * <Your Name>
+   * <Eric Minor>
    * 
-   * Partner: <Your Partner's Name>
+   * Partner: <Burak Karaoglu>
    * Collaborators: <Any Collaborators>
    */
 
@@ -99,10 +99,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case Minus => N(toNumber(eval(env,e1))-toNumber(eval(env,e2)))
           case Times => N(toNumber(eval(env,e1))*toNumber(eval(env,e2)))
           case Div => N(toNumber(eval(env,e1))/toNumber(eval(env,e2)))
-          case Eq => {
-            println(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
-            B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
-          }
+          case Eq => B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
           case Ne => B(toNumber(eval(env,e1)) != toNumber(eval(env,e2)))
           case Lt => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
           case Le => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
@@ -129,7 +126,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
         }
       }
       case If(e1, e2, e3) => if(toBoolean((eval(env,e1)))) eval(env,e2) else eval(env,e3)
-      case ConstDecl(x, e1, e2) =>eval(extend(env,x,e1),e2)
+      case ConstDecl(x, e1, e2) =>eval(extend(env,x,eval(e1)),e2)
       case _ => B(false)
     }
   }
