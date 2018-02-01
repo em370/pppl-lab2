@@ -108,6 +108,10 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case Le => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
           case Gt => B(toNumber(eval(env,e1)) > toNumber(eval(env,e2)))
           case Ge => B(toNumber(eval(env,e1)) >= toNumber(eval(env,e2)))
+          case Seq => {
+            eval(env,e1)
+            return eval(env,e2)
+          }
         }
       }
       /* Inductive Cases */
@@ -116,6 +120,8 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
       case N(n) => N(n)
       case B(b) => B(b)
       case S(s) => S(s)
+      case Undefined => Undefined
+      case Var(x) => lookup(env,x)
       case Unary(uop, e1) => {
         uop match{
           case Neg => N(-toNumber(eval(env,e1)))
@@ -123,7 +129,8 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
         }
       }
       case If(e1, e2, e3) => if(toBoolean((eval(env,e1)))) eval(env,e2) else eval(env,e3)
-      case _ => ???
+      case ConstDecl(x, e1, e2) =>eval(extend(env,x,e1),e2)
+      case _ => B(false)
     }
   }
 
