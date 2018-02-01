@@ -99,7 +99,10 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case Minus => N(toNumber(eval(env,e1))-toNumber(eval(env,e2)))
           case Times => N(toNumber(eval(env,e1))*toNumber(eval(env,e2)))
           case Div => N(toNumber(eval(env,e1))/toNumber(eval(env,e2)))
-          case Eq => B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
+          case Eq => {
+            println(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
+            B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
+          }
           case Ne => B(toNumber(eval(env,e1)) != toNumber(eval(env,e2)))
           case Lt => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
           case Le => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
@@ -113,6 +116,13 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
       case N(n) => N(n)
       case B(b) => B(b)
       case S(s) => S(s)
+      case Unary(uop, e1) => {
+        uop match{
+          case Neg => N(-toNumber(eval(env,e1)))
+          case Not => B(!toBoolean(eval(env,e1)))
+        }
+      }
+      case If(e1, e2, e3) => if(toBoolean((eval(env,e1)))) eval(env,e2) else eval(env,e3)
       case _ => ???
     }
   }
