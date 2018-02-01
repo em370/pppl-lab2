@@ -93,12 +93,14 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
       /* Base Cases */
       case Binary(bop,e1,e2) => {
         bop match{
-          case And => B( toBoolean(eval(env,e1)) && toBoolean(eval(env,e2)))
-          case Or => B( toBoolean(eval(env,e1)) || toBoolean(eval(env,e2)))
+          case And => if(toBoolean(eval(env,e1))) eval(env,e2) else eval(env,e1)
+          case Or => if(toBoolean(eval(env,e1))) eval(env,e1) else eval(env,e2)
           case Plus => N(toNumber(eval(env,e1))+toNumber(eval(env,e2)))
           case Minus => N(toNumber(eval(env,e1))-toNumber(eval(env,e2)))
           case Times => N(toNumber(eval(env,e1))*toNumber(eval(env,e2)))
           case Div => N(toNumber(eval(env,e1))/toNumber(eval(env,e2)))
+          case Eq => B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
+          case Ne => B(toNumber(eval(env,e1)) != toNumber(eval(env,e2)))
         }
       }
       /* Inductive Cases */
