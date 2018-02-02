@@ -88,6 +88,14 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
     }
   }
 
+  def strToUni(v: Expr): Double ={
+    v match {
+      case S(s) => s.foldLeft(1L)(_ * _.toInt)
+      case _ => Double.NaN
+    }
+  }
+
+
   def eval(env: Env, e: Expr): Expr = {
     e match {
       /* Base Cases */
@@ -96,10 +104,10 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case And => if(toBoolean(eval(env,e1))) eval(env,e2) else eval(env,e1)
           case Or => if(toBoolean(eval(env,e1))) eval(env,e1) else eval(env,e2)
           case Plus => {
-            e1 match {
+            eval(env, e1) match {
               case S(_) => S (toStr((eval (env, e1))) + toStr(eval(env,e2)) )
               case _ =>{
-                e2 match{
+                eval(env, e2) match{
                   case S(_) => S (toStr((eval (env, e1))) + toStr(eval(env,e2)) )
                   case _ => N(toNumber(eval(env,e1))+toNumber(eval(env,e2)))
                 }
@@ -109,12 +117,32 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case Minus => N(toNumber(eval(env,e1))-toNumber(eval(env,e2)))
           case Times => N(toNumber(eval(env,e1))*toNumber(eval(env,e2)))
           case Div => N(toNumber(eval(env,e1))/toNumber(eval(env,e2)))
-          case Eq => B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
-          case Ne => B(toNumber(eval(env,e1)) != toNumber(eval(env,e2)))
-          case Lt => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
-          case Le => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
-          case Gt => B(toNumber(eval(env,e1)) > toNumber(eval(env,e2)))
-          case Ge => B(toNumber(eval(env,e1)) >= toNumber(eval(env,e2)))
+
+
+          case Eq => (eval(env, e1),eval(env, e2)) match{
+            case (S(_),S(_)) => B(strToUni(eval(env,e1)) == strToUni(eval(env,e2)))
+            case _ => B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
+          }
+          case Ne => (eval(env, e1),eval(env, e2)) match{
+            case (S(_),S(_)) => B(strToUni(eval(env,e1)) != strToUni(eval(env,e2)))
+            case _ => B(toNumber(eval(env,e1)) != toNumber(eval(env,e2)))
+          }
+          case Lt => (eval(env, e1),eval(env, e2)) match{
+            case (S(_),S(_)) => B(strToUni(eval(env,e1)) < strToUni(eval(env,e2)))
+            case _ => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
+          }
+          case Le => (eval(env, e1),eval(env, e2)) match{
+            case (S(_),S(_)) => B(strToUni(eval(env,e1)) <= strToUni(eval(env,e2)))
+            case _ => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
+          }
+          case Gt => (eval(env, e1),eval(env, e2)) match{
+            case (S(_),S(_)) => B(strToUni(eval(env,e1)) > strToUni(eval(env,e2)))
+            case _ => B(toNumber(eval(env,e1)) > toNumber(eval(env,e2)))
+          }
+          case Ge => (eval(env, e1),eval(env, e2)) match{
+            case (S(_),S(_)) => B(strToUni(eval(env,e1)) >= strToUni(eval(env,e2)))
+            case _ => B(toNumber(eval(env,e1)) >= toNumber(eval(env,e2)))
+          }
           case Seq => {
             eval(env,e1)
             return eval(env,e2)

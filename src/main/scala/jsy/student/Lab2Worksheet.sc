@@ -25,5 +25,3 @@ val negFourAST = parse("-4")
 //eval("undefined + 1")
 val e2 = S("a")
 val e4 = eval(Unary(Not, e2))
-
-"b">"a"
