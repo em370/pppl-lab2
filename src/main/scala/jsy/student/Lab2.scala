@@ -63,7 +63,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
     (v: @unchecked) match {
       case N(n) => n
       case B(b) => if(b) 1 else 0
-      case S(s) => s.toDouble
+      case S(s) => try {s.toDouble} catch {case _ => Double.NaN}
       case Undefined => Double.NaN
     }
   }
@@ -73,7 +73,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
     (v: @unchecked) match {
       case B(b) => b
       case N(n) => if(n==0) false else true
-      case S(s) => if(toNumber(v)==0) false else true
+      case S(s) => if(s=="") false else true
       case Undefined => false
     }
   }
@@ -84,7 +84,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
       case S(s) => s
       case Undefined => "undefined"
       case N(n) => n.toString
-      case B(b) => if(b) "1" else "0"
+      case B(b) => if(b) "true" else "false"
     }
   }
 
@@ -95,7 +95,17 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
         bop match{
           case And => if(toBoolean(eval(env,e1))) eval(env,e2) else eval(env,e1)
           case Or => if(toBoolean(eval(env,e1))) eval(env,e1) else eval(env,e2)
-          case Plus => N(toNumber(eval(env,e1))+toNumber(eval(env,e2)))
+          case Plus => {
+            e1 match {
+              case S(_) => S (toStr((eval (env, e1))) + toStr(eval(env,e2)) )
+              case _ =>{
+                e2 match{
+                  case S(_) => S (toStr((eval (env, e1))) + toStr(eval(env,e2)) )
+                  case _ => N(toNumber(eval(env,e1))+toNumber(eval(env,e2)))
+                }
+              }
+            }
+          }
           case Minus => N(toNumber(eval(env,e1))-toNumber(eval(env,e2)))
           case Times => N(toNumber(eval(env,e1))*toNumber(eval(env,e2)))
           case Div => N(toNumber(eval(env,e1))/toNumber(eval(env,e2)))

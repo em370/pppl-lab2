@@ -51,7 +51,13 @@ class Lab2Spec(lab2: Lab2Like) extends FlatSpec {
     val e1 = N(1)
     val e2 = N(2)
     val e3 = eval(Binary(Plus, e1, e2))
+
+    val e4 = S("a")
+    val e5 = S("b")
+    val e6 = eval(Binary(Plus, e4, e5))
     assert(e3 === N(3))
+    assert(e6 === S("ab"))
+
   }
 
   "Minus" should "subtract two number values and return a number" in {
@@ -231,6 +237,10 @@ class Lab2Spec(lab2: Lab2Like) extends FlatSpec {
     val e1 = N(5)
     val e2 = eval(Unary(Neg, e1))
     assert(e2 === N(-5))
+
+    val e3 = N(-5)
+    val e4 = eval(Unary(Neg, e3))
+    assert(e4 === N(5))
   } 
   
   "Not" should "return the compliment of a boolean value" in {
@@ -238,10 +248,26 @@ class Lab2Spec(lab2: Lab2Like) extends FlatSpec {
     val e2 = B(false)
     val e3 = eval(Unary(Not, e1))
     val e4 = eval(Unary(Not, e2))
+
+    val e5 = S("0")
+    val e6 = eval(Unary(Not,e5))
     assert(e3 === B(false))
     assert(e4 === B(true))
+    assert(e6 === B(false))
+  }
+
+  "toBoolean" should "return the boolean value" in {
+    val e1 = S("0")
+    val e2 = toBoolean(e1)
+    val e3 = S("")
+    val e4 = toBoolean(e3)
+    assert(e2 === true)
+    assert(e4 === false)
+
   }
 }
+
+
 
 // An adapter class to pass in your Lab2 object.
 class Lab2SpecRunner extends Lab2Spec(Lab2)

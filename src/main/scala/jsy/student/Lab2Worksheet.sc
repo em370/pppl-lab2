@@ -23,4 +23,7 @@ val negFourAST = parse("-4")
 // For convenience, we also have an eval function that takes a string,
 // which calls the parser and then delegates to your eval function.
 //eval("undefined + 1")
+val e2 = S("a")
+val e4 = eval(Unary(Not, e2))
 
+"b">"a"
