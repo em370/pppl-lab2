@@ -120,27 +120,27 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
 
 
           case Eq => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(strToUni(eval(env,e1)) == strToUni(eval(env,e2)))
+            case (S(_),S(_)) => B(toStr(eval(env,e1)) == toStr(eval(env,e2)))
             case _ => B(toNumber(eval(env,e1)) == toNumber(eval(env,e2)))
           }
           case Ne => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(strToUni(eval(env,e1)) != strToUni(eval(env,e2)))
+            case (S(_),S(_)) => B(toStr(eval(env,e1)) != toStr(eval(env,e2)))
             case _ => B(toNumber(eval(env,e1)) != toNumber(eval(env,e2)))
           }
           case Lt => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(strToUni(eval(env,e1)) < strToUni(eval(env,e2)))
+            case (S(_),S(_)) => B(toStr(eval(env,e1)) < toStr(eval(env,e2)))
             case _ => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
           }
           case Le => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(strToUni(eval(env,e1)) <= strToUni(eval(env,e2)))
+            case (S(_),S(_)) => B(toStr(eval(env,e1)) <= toStr(eval(env,e2)))
             case _ => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
           }
           case Gt => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(strToUni(eval(env,e1)) > strToUni(eval(env,e2)))
+            case (S(_),S(_)) => B(toStr(eval(env,e1)) > toStr(eval(env,e2)))
             case _ => B(toNumber(eval(env,e1)) > toNumber(eval(env,e2)))
           }
           case Ge => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(strToUni(eval(env,e1)) >= strToUni(eval(env,e2)))
+            case (S(_),S(_)) => B(toStr(eval(env,e1)) >= toStr(eval(env,e2)))
             case _ => B(toNumber(eval(env,e1)) >= toNumber(eval(env,e2)))
           }
           case Seq => {
