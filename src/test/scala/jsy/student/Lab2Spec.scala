@@ -79,6 +79,7 @@ class Lab2Spec(lab2: Lab2Like) extends FlatSpec {
     val e2 = N(5)
     val e3 = eval(Binary(Div, e1, e2))
     assert(e3 === N(1.6))
+
   }
 
   "Arithmetic Operators" should "produce non-intuitive solutions given differing expression types" in {
@@ -238,9 +239,12 @@ class Lab2Spec(lab2: Lab2Like) extends FlatSpec {
     val e2 = eval(Unary(Neg, e1))
     assert(e2 === N(-5))
 
+
     val e3 = N(-5)
     val e4 = eval(Unary(Neg, e3))
     assert(e4 === N(5))
+
+    assert(e2 === N(-5))
   } 
   
   "Not" should "return the compliment of a boolean value" in {
