@@ -52,11 +52,11 @@ class Lab2Spec(lab2: Lab2Like) extends FlatSpec {
     val e2 = N(2)
     val e3 = eval(Binary(Plus, e1, e2))
 
-    val e4 = S("a")
+    val e4 = S("2")
     val e5 = S("b")
     val e6 = eval(Binary(Plus, e4, e5))
     assert(e3 === N(3))
-    assert(e6 === S("ab"))
+    assert(e6 === S("2b"))
 
   }
 

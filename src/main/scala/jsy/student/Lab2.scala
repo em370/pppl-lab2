@@ -72,7 +72,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
     require(isValue(v))
     (v: @unchecked) match {
       case B(b) => b
-      case N(n) => if(n==0) false else true
+      case N(n) => if(n==0 || n.isNaN) false else true
       case S(s) => if(s=="") false else true
       case Undefined => false
     }
@@ -83,17 +83,11 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
     (v: @unchecked) match {
       case S(s) => s
       case Undefined => "undefined"
-      case N(n) => n.toString
+      case N(n) => if(n%1 == 0) n.toInt.toString else n.toString
       case B(b) => if(b) "true" else "false"
     }
   }
 
-  def strToUni(v: Expr): Double ={
-    v match {
-      case S(s) => s.foldLeft(1L)(_ * _.toInt)
-      case _ => Double.NaN
-    }
-  }
 
 
   def eval(env: Env, e: Expr): Expr = {
@@ -119,51 +113,26 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case Div => N(toNumber(eval(env,e1))/toNumber(eval(env,e2)))
 
 
-          case Eq => (eval(env, e1),eval(env, e2)) match{
+          case Eq => B(eval(env,e1) == eval(env,e2))
 
-            case (S(_),S(_)) => B(eval(env,e1) ==eval(env,e2))
-            case (N(_),N(_)) => B(eval(env,e1) == eval(env,e2))
-            case (B(_),B(_)) => B(eval(env,e1) == eval(env,e2))
-            case (Undefined,Undefined) => B(true)
-            case (_,_) => B(false)
-          }
-          case Ne => (eval(env, e1),eval(env, e2)) match{
-            case (S(_),S(_)) => B(eval(env,e1) !=eval(env,e2))
-            case (N(_),N(_)) => B(eval(env,e1) != eval(env,e2))
-            case (B(_),B(_)) => B(eval(env,e1) != eval(env,e2))
-            case (Undefined,Undefined) => B(false)
-            case (_,_) => B(true)
-          }
+          case Ne => B(eval(env,e1) != eval(env,e2))
           case Lt => (eval(env, e1),eval(env, e2)) match{
-            case (Undefined,Undefined) => B(false)
-            case (Undefined,_) => B(false)
-            case (_,Undefined) => B(false)
             case (S(_),S(_)) => B(toStr(eval(env,e1)) < toStr(eval(env,e2)))
-            case _ => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
+            case (_,_) => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
           }
           case Le => (eval(env, e1),eval(env, e2)) match{
-            case (Undefined,Undefined) => B(false)
-            case (Undefined,_) => B(false)
-            case (_,Undefined) => B(false)
             case (S(_),S(_)) => B(toStr(eval(env,e1)) <= toStr(eval(env,e2)))
-            case _ => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
+            case (_,_) => B(toNumber(eval(env,e1)) <= toNumber(eval(env,e2)))
           }
           case Gt => (eval(env, e1),eval(env, e2)) match{
-            case (Undefined,Undefined) => B(false)
-            case (Undefined,_) => B(false)
-            case (_,Undefined) => B(false)
             case (S(_),S(_)) => B(toStr(eval(env,e1)) > toStr(eval(env,e2)))
-            case _ => B(toNumber(eval(env,e1)) > toNumber(eval(env,e2)))
+            case (_,_) => B(toNumber(eval(env,e1)) > toNumber(eval(env,e2)))
           }
           case Ge => (eval(env, e1),eval(env, e2)) match{
-            case (Undefined,Undefined) => B(false)
-            case (Undefined,_) => B(false)
-            case (_,Undefined) => B(false)
             case (S(_),S(_)) => B(toStr(eval(env,e1)) >= toStr(eval(env,e2)))
-            case _ => B(toNumber(eval(env,e1)) >= toNumber(eval(env,e2)))
+            case (_,_) => B(toNumber(eval(env,e1)) >= toNumber(eval(env,e2)))
           }
           case Seq => {
-            
             eval(env,e1)
             return eval(env,e2)
           }
@@ -185,7 +154,6 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
       }
       case If(e1, e2, e3) => if(toBoolean((eval(env,e1)))) eval(env,e2) else eval(env,e3)
       case ConstDecl(x, e1, e2) =>{
-
         eval(extend(env,x,eval(e1)),e2)
       }
 
