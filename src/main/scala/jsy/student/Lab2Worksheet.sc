@@ -15,7 +15,7 @@ import jsy.lab2.ast._
 import jsy.student.Lab2._
 
 // Call the JavaScripty parser (from the provided library) on a string
-val negFourAST = parse("-4")
+val negFourAST = parse("const x = 1; const y = x+1;x+y")
 
 // Evaluate that JavaScripty expression.
 // eval(negFourAST)
@@ -23,6 +23,8 @@ val negFourAST = parse("-4")
 // For convenience, we also have an eval function that takes a string,
 // which calls the parser and then delegates to your eval function.
 //eval("undefined + 1")
-eval("2+\"a\"")
+eval("const x = 1; const y = x+1;x+y")
+
+
 
 

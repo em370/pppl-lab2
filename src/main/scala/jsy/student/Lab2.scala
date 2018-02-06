@@ -97,16 +97,9 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
         bop match{
           case And => if(toBoolean(eval(env,e1))) eval(env,e2) else eval(env,e1)
           case Or => if(toBoolean(eval(env,e1))) eval(env,e1) else eval(env,e2)
-          case Plus => {
-            eval(env, e1) match {
-              case S(_) => S (toStr((eval (env, e1))) + toStr(eval(env,e2)) )
-              case _ =>{
-                eval(env, e2) match{
-                  case S(_) => S (toStr((eval (env, e1))) + toStr(eval(env,e2)) )
-                  case _ => N(toNumber(eval(env,e1))+toNumber(eval(env,e2)))
-                }
-              }
-            }
+          case Plus => (eval(env,e1),eval(env,e2)) match{
+            case (S(_),_)| (_,S(_)) => S(toStr((eval(env,e1)))+toStr((eval(env,e2))))
+            case (_,_) => N(toNumber(eval(env,e1)) + toNumber((eval(env,e2))))
           }
           case Minus => N(toNumber(eval(env,e1))-toNumber(eval(env,e2)))
           case Times => N(toNumber(eval(env,e1))*toNumber(eval(env,e2)))
@@ -116,6 +109,8 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
           case Eq => B(eval(env,e1) == eval(env,e2))
 
           case Ne => B(eval(env,e1) != eval(env,e2))
+
+
           case Lt => (eval(env, e1),eval(env, e2)) match{
             case (S(_),S(_)) => B(toStr(eval(env,e1)) < toStr(eval(env,e2)))
             case (_,_) => B(toNumber(eval(env,e1)) < toNumber(eval(env,e2)))
@@ -154,7 +149,7 @@ object Lab2 extends jsy.util.JsyApplication with Lab2Like {
       }
       case If(e1, e2, e3) => if(toBoolean((eval(env,e1)))) eval(env,e2) else eval(env,e3)
       case ConstDecl(x, e1, e2) =>{
-        eval(extend(env,x,eval(e1)),e2)
+        eval(extend(env,x,eval(env,e1)),e2)
       }
 
     }
